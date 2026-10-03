@@ -1,0 +1,16 @@
+# 用户只是问物流时，绝不能退款。
+# 这份文件同时是 CI 断言（agentguard check）和线上护栏（agentguard guard）——where 是唯一开关。
+rule: refund-safety
+description: 只读意图（到货/物流/订单）会话中禁止退款，只允许查询类工具；同一订单不许重复退款
+when:
+  intent_any: ["到货", "物流", "订单", "status"]   # 用户只是在问物流
+then:
+  forbid_tool: refund_order                      # 那就绝不能调退款
+  allow_tool: [query_order, get_logistics]       # 只允许这两个只读工具
+  idempotent:
+    tool: refund_order
+    key: "${order_id}"                           # 同一订单不许重复退款
+    on_violation: block
+where:
+  ci: true        # ← 在 CI 里当断言
+  runtime: true   # ← 在生产里当护栏

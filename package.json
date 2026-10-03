@@ -1,0 +1,35 @@
+{
+  "name": "agentguard",
+  "version": "0.1.0",
+  "description": "Agent 行为的回归测试 + 上线卡点：一份 YAML 规则，同时管 CI 测试和线上护栏",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "agentguard": "./src/cli.js"
+  },
+  "files": [
+    "src",
+    "examples",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test test/engine.test.js test/learn.test.js test/cli.test.js test/fixes.test.js test/ux.test.js test/realuse.test.js test/guard.test.js",
+    "demo": "node src/cli.js check --rules examples/rules --trace examples/traces/refund_incident.json"
+  },
+  "dependencies": {
+    "yaml": "^2.4.0"
+  },
+  "keywords": [
+    "agent",
+    "llm",
+    "mcp",
+    "testing",
+    "evaluation",
+    "guardrail",
+    "ci"
+  ]
+}

@@ -1,0 +1,23 @@
+# AgentGuard CI 卡点示例：合并前用同一份规则拦住回归
+# 放到你的仓库 .github/workflows/agentguard.yml
+name: agentguard
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  agent-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 从源码安装（包发布到 npm 后可改回 npm install -g agentguard）
+      - run: npm install -g .
+      # 规则目录 ./agentguard-rules 与 trace 归档 ./traces 随仓库维护（agentguard init 可生成示例）
+      # --trace 给目录会递归检查全部 .json；--strict 下规则名冲突（多团队共治）直接拒绝
+      - run: agentguard check --rules ./agentguard-rules --trace ./traces --strict

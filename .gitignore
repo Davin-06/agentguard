@@ -1,0 +1,7 @@
+node_modules/
+agentguard-audit.jsonl
+agentguard-promptfoo.yaml
+
+# 本地测试输出
+*.txt
+!LICENSE
